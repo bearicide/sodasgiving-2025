@@ -1,0 +1,74 @@
+html,body{margin:0;padding:0;height:100%;overflow:hidden;}
+body{font-family:'Raleway',sans-serif;}
+body.holiday{background:linear-gradient(120deg,#ffefe8,#fff8f8,#ffffff);}
+body.chaos{background:linear-gradient(120deg,#ff3300,#ff6600,#ffaa00);}
+
+.hidden{display:none;}
+
+#splash{
+ position:fixed;inset:0;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;
+ background:linear-gradient(180deg,#fff3f3,#ffecec);
+ z-index:10;
+ animation:fadeIn 1s ease-out;
+}
+.splash-art{
+ width:80%;
+ max-width:330px;
+ border-radius:18px;
+ box-shadow:0 6px 20px rgba(0,0,0,.3);
+ animation:popIn .7s ease-out;
+}
+.start-btn{
+ margin-top:1rem;
+ padding:1rem 1.5rem;
+ border:none;
+ border-radius:18px;
+ font-size:1.3rem;
+ font-weight:700;
+ background:#ff3a3a;
+ color:white;
+ box-shadow:0 4px 12px rgba(0,0,0,.3);
+ animation:float 2s infinite ease-in-out;
+}
+.start-btn:active{transform:scale(.92);}
+
+@keyframes popIn{0%{transform:scale(.7);opacity:0;}100%{transform:scale(1);opacity:1;}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes float{0%{transform:translateY(0);}50%{transform:translateY(-6px);}100%{transform:translateY(0);}}
+
+/* App */
+#app{
+ width:100%;max-width:480px;margin:auto;
+ display:flex;flex-direction:column;text-align:center;
+ height:100%;padding:.5rem;box-sizing:border-box;
+}
+
+/* Card & Buttons */
+#card{
+ background:white;padding:1rem;border-radius:20px;
+ box-shadow:0 5px 12px rgba(0,0,0,.25);
+ margin:.5rem 0;
+}
+#controls button{
+ padding:1rem;margin:.3rem;font-size:1.1rem;
+ border:none;border-radius:999px;font-weight:700;color:white;
+ box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.next{background:#00b7ff;}
+.jerk{background:#ff3a3a;}
+.rare{background:#ffd200;color:black;}
+.omega{background:#9000ff;}
+.howto{background:#0066ff;}
+
+footer .footer-text{font-size:.75rem;opacity:.6;}
+
+#howto-panel,#stats-panel{
+ position:fixed;inset:0;background:rgba(0,0,0,.5);
+ display:flex;justify-content:center;align-items:center;
+}
+
+.howto-inner,.panel-inner{
+ background:white;width:280px;padding:1rem;
+ border-radius:14px;
+}
