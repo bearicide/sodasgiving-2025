@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>The Soda Spinner!</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fredoka:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    /* PAGE */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #8fb2e5;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: #111;
+      overflow-x: hidden;
+    }
+
+    /* TITLE */
+    h1 {
+      margin-top: 25px;
+      font-size: 40px;
+      color: #ffd37a;
+      font-weight: 700;
+      text-shadow:
+      0 0 10px #ffcc66,
+      0 0 20px #ffb347,
+      0 0 30px #ffa500;
+    }
+
+    /* BOX */
+    .box {
+      width: 90%;
+      max-width: 430px;
+      margin: 20px auto;
+      background: rgba(255,255,255,0.55);
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: 0 0 14px #0004;
+      border: 1px solid #fff;
+    }
+
+    /* RULES */
+    .box h2 {
+      font-size: 26px;
+      color: #d47a00;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    ul li::before {
+      content: "• ";
+      color: #d47a00;
+    }
+
+    /* WHEEL */
+    #wheel {
+      width: 100%;
+      max-width: 350px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .pointer-wrapper {
+      width: 100%;
+      max-width: 350px;
+      margin: 10px auto;
+      height: 30px;
+      position: relative;
+    }
+    .pointer {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%) rotate(180deg);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 30px solid #ff4444;
+    }
+
+    /* BUTTONS */
+    button, .link-btn {
+      display: inline-block;
+      padding: 16px 24px;
+      margin: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      color: #222;
+      text-decoration: none;
+      font-family: 'Fredoka', sans-serif;
+      box-shadow: 0 0 12px #0006;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    button:hover, .link-btn:hover {
+      transform: scale(1.05);
+      filter: brightness(1.15);
+    }
+
+    #spinBtn {
+      background: #ffb347;
+      font-size: 30px;
+    }
+
+    #resetBtn {
+      background: #cc2233;
+      color: #fff;
+    }
+
+    /* NAV BUTTONS */
+    .link-btn {
+      background: #ffd37a;
+      width: 80%;
+      max-width: 350px;
+      display: block;
+      margin: 14px auto;
+      font-size: 26px;
+      text-shadow:
+      0 0 8px #fff8,
+      0 0 12px #fff6,
+      0 0 16px #ffd37a;
+    }
+
+    /* POPUP */
+    #popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+    }
+
+    #popup-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 22px;
+      width: 85%;
+      max-width: 330px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 0 25px #0009;
+      animation: pop 0.3s ease-out;
+    }
+
+    @keyframes pop {
+      from {
+        transform: translate(-50%, -42%) scale(0.85);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    #popup-img {
+      width: 200px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+
+    #popup-close {
+      padding: 12px 20px;
+      background: #cc2233;
+      color: white;
+      font-size: 20px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    /* FOOTER */
+    footer {
+      font-size: 14px;
+      margin-top: 40px;
+      margin-bottom: 100px;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>The Soda Spinner!</h1>
+
+  <!-- RULES -->
+  <div class="box">
+    <h2>Rules:</h2>
+    <ul>
+      <li>Sample each soda!</li>
+      <li>Spin the Spinner!</li>
+      <li>Enjoy your drink!</li>
+      <li>Sharing is encouraged!</li>
+    </ul>
+  </div>
+
+  <!-- SPINNER -->
+  <div class="box">
+    <canvas id="wheel" width="350" height="350"></canvas>
+    <div class="pointer-wrapper">
+      <div class="pointer"></div>
+    </div>
+    <button id="spinBtn">SPIN</button>
+    <button id="resetBtn">RESET</button>
+  </div>
+
+  <!-- NAVIGATION BUTTONS -->
+  <a class="link-btn" href="linguistic-shenanigans.html">✨ Linguistic Shenanigans!</a>
+  <a class="link-btn" href="asianstore-index.html">🛒 Asian Market</a>
+  <a class="link-btn" href="https://bearicide.github.io" target="_blank">🌐 GitHub</a>
+
+  <!-- POPUP -->
+  <div id="popup">
+    <div id="popup-content">
+      <img id="popup-img" src="">
+      <div id="popup-label"></div>
+      <button id="popup-close">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Second Wind Studios — Created by Matt Baier & ChatGPT.
+    All rights reserved. Redistribution or commercial use prohibited
+    without written permission. Donation-based and educational use allowed.
+  </footer>
+
+  <script>
+    /* SODAS */
+    const baseSlices = [{
+      name: "Honey Crisp Apple",
+      color: "#b2ff66",
+      img: "sprecher-honeycrisp.jpg"
+    },
+      {
+        name: "Orange Dream",
+        color: "#ff9800",
+        img: "sprecher-orange.jpg"
+      },
+      {
+        name: "Root Beer",
+        color: "#d2b48c",
+        img: "sprecher-rootbeer.jpg"
+      },
+      {
+        name: "Cream Soda",
+        color: "#fff5cc",
+        img: "sprecher-cream.jpg"
+      }];
+
+    const slices = [];
+    for (let i = 0; i < 16; i++) slices.push(baseSlices[i%4]);
+
+    const wheel = document.getElementById("wheel");
+    const ctx = wheel.getContext("2d");
+    const cx = 175, cy = 175, radius = 160;
+
+    let rotation = 0, spinning = false;
+
+    /* DRAW WHEEL */
+    function draw(angle) {
+      ctx.clearRect(0, 0, 350, 350);
+      const sliceAngle = 360/slices.length;
+      for (let i = 0; i < slices.length; i++) {
+        const start=-90+i*sliceAngle+angle;
+        const end = start+sliceAngle;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, start*Math.PI/180, end*Math.PI/180);
+        ctx.closePath();
+        ctx.fillStyle = slices[i].color;
+        ctx.fill();
+      }
+    }
+    draw(0);
+
+    /* READ SLICE */
+    function readSoda() {
+      const px = cx;
+      const py = cy+(radius-15);
+      const data = ctx.getImageData(px, py, 1, 1).data;
+      const [r,
+        g,
+        b] = data;
+
+      let best = null,
+      score = Infinity;
+      for (let soda of baseSlices) {
+        let col = document.createElement("canvas").getContext("2d");
+      }
+      // simplified: choose based on angle instead of pixel color
+      const angle = ((rotation%360)+360)%360;
+      const sliceAngle = 360/slices.length;
+      const index = Math.floor(angle/sliceAngle);
+      return slices[index];
+    }
+
+    /* POPUP */
+    function showPopup(soda) {
+      document.getElementById("popup-img").src = soda.img;
+      document.getElementById("popup-label").textContent = soda.name;
+      document.getElementById("popup").style.display = "block";
+    }
+    document.getElementById("popup-close").onclick = ()=> {
+      document.getElementById("popup").style.display = "none";
+    };
+
+    /* SPIN */
+    document.getElementById("spinBtn").onclick = ()=> {
+      if (spinning || slices.length === 0) return;
+      spinning = true;
+
+      const extra = 360*10+Math.random()*360;
+      const start = rotation;
+      const end = rotation+extra;
+      const duration = 5000;
+      const t0 = performance.now();
+
+      function animate(t) {
+        const p = Math.min((t-t0)/duration, 1);
+        const eased = 1-Math.pow(1-p, 3);
+        rotation = start+(end-start)*eased;
+        draw(rotation);
+
+        if (p < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          rotation = ((rotation%360)+360)%360;
+          draw(rotation);
+
+          const chosen = readSoda();
+
+          /* remove slice */
+          const idx = slices.indexOf(chosen);
+          if (idx!==-1) slices.splice(idx, 1);
+
+          showPopup(chosen);
+
+          spinning = false;
+        }
+      }
+      requestAnimationFrame(animate);
+    };
+
+    /* RESET */
+    document.getElementById("resetBtn").onclick = ()=> {
+      slices.length = 0;
+      for (let i = 0; i < 16; i++) slices.push(baseSlices[i%4]);
+
+      rotation = Math.random()*360;
+      draw(rotation);
+    };
+  </script>
+
+</body>
+</html>

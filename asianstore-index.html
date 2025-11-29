@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asian Grocery Guide — Full‑Sensory Fusion (Web)</title>
+  <style>
+    :root{
+      --bg:#f9f5ec;          /* light parchment */
+      --paper:#fffaf0;       /* lighter parchment */
+      --ink:#222;            /* primary text */
+      --muted:#555;          /* secondary text */
+      --red:#9d0b0b;         /* crimson */
+      --jade:#0e7a4b;        /* jade */
+      --gold:#b07a00;        /* gold */
+      --line: #e2d7bf;       /* divider */
+      --chip:#f1e7cf;        /* filter chip */
+      --card:#fffdf7;        /* card bg */
+      --shadow: 0 6px 18px rgba(0,0,0,.06);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Arial, "Apple Color Emoji", "Segoe UI Emoji";}
+    header{
+      position:sticky; top:0; z-index:5;
+      background:linear-gradient(180deg, #fffaf0 0%, #fffaf0cc 70%, #fff0 100%), var(--paper);
+      border-bottom:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 16px}
+    .title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:clamp(22px,4vw,32px);color:var(--red);letter-spacing:.5px}
+    .sub{margin:2px 0 0;color:var(--jade);font-size:clamp(12px,2.5vw,14px)}
+    .controls{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
+    .search{display:flex;gap:8px;align-items:center;background:var(--card);padding:10px 12px;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+    .search input{border:none;outline:none;background:transparent;width:100%;font-size:15px;color:var(--ink)}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{border:1px solid var(--line);background:var(--chip);padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--ink)}
+    .btn:hover{filter:brightness(.97)}
+    .btn.red{background:#f8e7e7;color:var(--red);border-color:#f1c9c9}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--chip);border:1px solid var(--line);padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;user-select:none}
+.chip input{accent-color:var(--jade)}
+.range{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);background:var(--chip);border-radius:12px}
+.range input[type=range]{width:140px}
+
+main{max-width:1100px;margin:16px auto;padding:0 16px 48px}
+.section{margin:22px 0 6px}
+.section-header{display:flex;align-items:center;gap:10px}
+.section-header h2{margin:0;font-size:20px;color:var(--red)}
+.divider{height:1px;background:linear-gradient(90deg, #0000, var(--gold), #0000);margin:8px 0 14px}
+
+details.palette{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:0;margin:0 0 14px}
+details.palette[open] > summary{border-bottom:1px dashed var(--line)}
+summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:600;color:var(--jade)}
+summary::-webkit-details-marker{display:none}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.name{font-weight:700;color:var(--jade)}
+.taste{color:var(--muted);font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{font-size:12px;border:1px solid var(--line);background:#fff; padding:5px 8px;border-radius:999px;color:#333}
+.meta{display:flex;align-items:center;gap:8px;font-size:12px;color:#666}
+.spice{letter-spacing:1px}
+
+footer{padding:24px 16px;border-top:1px solid var(--line);background:var(--paper);text-align:center;color:#6a5120}
+
+/* tiny decorative wave band */
+.wave{height:8px;background:repeating-linear-gradient(90deg, #0000 0 20px, #e9dcc1 20px 22px, #0000 22px 42px)}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">
+        <div>
+          <h1>Asian Grocery Guide — Full‑Sensory Fusion</h1>
+          <div class="sub">Portrait vibe, light parchment, crimson‑jade‑gold. Taste first, poetry second.</div>
+        </div>
+        <div class="buttons">
+          <button class="btn" id="btnExpand">Expand all</button>
+          <button class="btn" id="btnCollapse">Collapse all</button>
+          <button class="btn red" id="btnReset">Reset filters</button>
+        </div>
+      </div><div class="controls">
+    <div class="search">
+      <span>🔎</span>
+      <input id="q" placeholder="Search name, flavor, texture… (e.g., garlic, chewy, lychee)" />
+    </div>
+    <div class="range" title="Minimum spice">
+      <span>🌶️ min</span>
+      <input type="range" id="spiceMin" min="0" max="3" step="1" value="0" />
+      <span id="spiceLabel">0</span>
+    </div>
+  </div>
+
+  <div class="filters" id="chips">
+    <label class="chip"><input type="checkbox" value="sweet"/> 🍬 Sweet</label>
+    <label class="chip"><input type="checkbox" value="savory"/> 🍜 Savory</label>
+    <label class="chip"><input type="checkbox" value="spicy"/> 🌶️ Spicy</label>
+    <label class="chip"><input type="checkbox" value="sour"/> 🍋 Sour/Tangy</label>
+    <label class="chip"><input type="checkbox" value="umami"/> 🧂 Umami</label>
+    <label class="chip"><input type="checkbox" value="fruity"/> 🍓 Fruity</label>
+    <label class="chip"><input type="checkbox" value="herbal"/> 🌿 Herbal</label>
+    <label class="chip"><input type="checkbox" value="chewy"/> 🍞 Chewy</label>
+    <label class="chip"><input type="checkbox" value="crunchy"/> 🧊 Crunchy</label>
+    <label class="chip"><input type="checkbox" value="creamy"/> 🥛 Creamy</label>
+  </div>
+</div>
+<div class="wave"></div>
+
+  </header>  <main id="app"></main>  <footer>
+    Harmony in flavor • Diversity in every bite • Built for quick scanning and snack decisions
+  </footer>  <script>
+    // --- Data ---------------------------------------------------------------
+    const DATA = [
+      // Drinks
+      {section:'Drinks', name:'Inotea / Jans Boba Milk Tea', taste:'Creamy, sweet, tapioca chew; taro is nutty-floral, brown sugar is caramel-forward.', tags:['sweet','creamy'], spice:0},
+      {section:'Drinks', name:'Ramune', taste:'Crisp, fizzy, light sweetness — like Sprite with a bubblegum wink.', tags:['sweet','fruity'], spice:0},
+      {section:'Drinks', name:'C2 Green Tea', taste:'Lightly sweet, slightly vegetal; more soda than brewed tea.', tags:['sweet','herbal'], spice:0},
+      {section:'Drinks', name:'Apple Sidra', taste:'Bold apple soda; crisp, clean, fizzy apple juice energy.', tags:['sweet','fruity'], spice:0},
+      {section:'Drinks', name:'Lucozade', taste:'Sugar-citrus pop with gentle tang; functional fizz.', tags:['sweet'], spice:0},
+      {section:'Drinks', name:'FOCO / Gina / RICO (fruit drinks)', taste:'Straight-up fruit syrup vibes: coconut is cooling-nutty; lychee is floral-sweet.', tags:['sweet','fruity'], spice:0},
+      {section:'Drinks', name:'Mr. Brown (canned coffee)', taste:'Sweet, milky coffee with caramel notes — dessert coffee.', tags:['sweet','creamy','bitter'], spice:0},
+      {section:'Drinks', name:'Aloe / Grass Jelly / Calamansi drinks', taste:'Aloe & grass jelly are herbal, gently sweet with jelly bits; calamansi is bright-tart.', tags:['herbal','sweet','sour'], spice:0},
+      {section:'Drinks', name:'Mogu-Mogu', taste:'Juice with chewy chunks; playful sweetness and texture.', tags:['sweet','fruity','chewy'], spice:0},
+
+      // Refrigerated & Frozen
+      {section:'Refrigerated & Frozen', name:'Fresh mangoes', taste:'Juicy sweet-tart; melts to buttery when super ripe.', tags:['sweet','fruity'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Bánh phở noodles', taste:'Neutral, silky rice sheets that drink up broth.', tags:['neutral','chewy'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Miso', taste:'Savory, salty, fermented umami; white is mellow, red is punchy.', tags:['umami','savory'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Kimchi', taste:'Sour, spicy, crunchy — vinegary fermentation with snap.', tags:['spicy','sour','crunchy','umami'], spice:2},
+      {section:'Refrigerated & Frozen', name:'Dried seafood (anchovy/shrimp/squid)', taste:'Salty, concentrated sea umami; stock booster and garnish.', tags:['umami','salty'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Ensaymada', taste:'Buttery, soft, sweet brioche with cheese sprinkle.', tags:['sweet','creamy'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Pandesal', taste:'Light, slightly sweet roll — fluffy sandwich hero.', tags:['sweet'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Kimbap rolls', taste:'Balanced rice, veg, and protein; sesame-savory with seaweed aroma.', tags:['savory','umami'], spice:0},
+      {section:'Refrigerated & Frozen', name:'Tteok / rice cakes', taste:'Neutral flavor; bouncy-chewy texture that loves sauce.', tags:['chewy','neutral'], spice:0},
+
+      // Condiments & Pastes
+      {section:'Condiments & Pastes', name:'Datu Puti / Silver Swan vinegars', taste:'Clean, sharp cane vinegar — wakes up dips and adobo.', tags:['sour'], spice:0},
+      {section:'Condiments & Pastes', name:'Pinakurat', taste:'Spicy, garlicky coconut vinegar — zippy and hot.', tags:['spicy','sour','garlic'], spice:2},
+      {section:'Condiments & Pastes', name:'Kikkoman / Tamari / Ponzu / Black vinegar', taste:'Soy family: salty-savory; ponzu adds citrus; black vinegar is deep-sweet.', tags:['umami','salty','sour'], spice:0},
+      {section:'Condiments & Pastes', name:'Rufina Patis (fish sauce)', taste:'Pungent, salty ocean umami; a few drops = depth.', tags:['umami','salty'], spice:0},
+      {section:'Condiments & Pastes', name:'Lao Gan Ma chili crisp', taste:'Crunchy, spicy, slightly smoky chili oil with bits.', tags:['spicy','crunchy','umami'], spice:2},
+      {section:'Condiments & Pastes', name:'Korean marinades (bulgogi/galbi)', taste:'Sweet-savory soy, sesame aroma; caramelizes beautifully.', tags:['sweet','savory','umami'], spice:0},
+      {section:'Condiments & Pastes', name:'Mama Sita’s sauces', taste:'Filipino ready sauces; balanced, slightly sweet seasoning.', tags:['savory','sweet'], spice:0},
+      {section:'Condiments & Pastes', name:'Bagoong / Shrimp Paste', taste:'Funky, salty, shrimpy; tiny spoonful = flavor bomb.', tags:['umami','salty','funky'], spice:0},
+      {section:'Condiments & Pastes', name:'Tuyo flakes (dried fish)', taste:'Oily-salty fish; breakfast rice best friend.', tags:['umami','salty'], spice:0},
+      {section:'Condiments & Pastes', name:'Sesame / Peanut oil', taste:'Sesame is toasty-aromatic; peanut is neutral-fry rich.', tags:['toasty'], spice:0},
+      {section:'Condiments & Pastes', name:'Tom Yum paste / Thai chili paste', taste:'Sour, spicy, fragrant — lime, chili, lemongrass trio.', tags:['spicy','sour','herbal'], spice:2},
+      {section:'Condiments & Pastes', name:'Minced garlic / tahini', taste:'Garlic is sharp-savory; tahini is nutty-creamy.', tags:['garlic','savory','creamy'], spice:0},
+
+      // Biscuits & Sweets
+      {section:'Biscuits & Sweets', name:'SkyFlakes / Magic Creams', taste:'Light salty cracker with sweet cream — simple, snackable.', tags:['sweet','crunchy'], spice:0},
+      {section:'Biscuits & Sweets', name:'Butter Cream (ube/chocolate)', taste:'Crunchy sandwich cracker with sweet filling.', tags:['sweet','crunchy'], spice:0},
+      {section:'Biscuits & Sweets', name:'Hana / Leslie’s Toasts', taste:'Buttery crisp toast; coffee’s best friend.', tags:['sweet','crunchy'], spice:0},
+      {section:'Biscuits & Sweets', name:'Prime Toast / Ice Crackers', taste:'Thin sweet crackers — nostalgia in bite form.', tags:['sweet','crunchy'], spice:0},
+      {section:'Biscuits & Sweets', name:'Choc Nut', taste:'Powdery peanut-chocolate, melts fast, nutty-sweet.', tags:['sweet','nutty'], spice:0},
+      {section:'Biscuits & Sweets', name:'Cloud 9', taste:'Chocolate, caramel, peanuts — confectionery classic.', tags:['sweet','nutty'], spice:0},
+      {section:'Biscuits & Sweets', name:'Kracie Popin’ Cookin’', taste:'DIY candy play set — sugary, novelty textures.', tags:['sweet'], spice:0},
+      {section:'Biscuits & Sweets', name:'Ginger Chews', taste:'Spicy-sweet, chewy; clears sinuses politely.', tags:['spicy','sweet','chewy'], spice:1},
+
+      // Savory Snacks
+      {section:'Savory Snacks', name:'Boy Bawang', taste:'Corn-forward, roasted garlic crunch — like corn nuts, but Asian.', tags:['savory','crunchy','garlic'], spice:0},
+      {section:'Savory Snacks', name:'Ding Dong', taste:'Mixed crackers and nuts; salty chaos, many textures.', tags:['savory','crunchy'], spice:0},
+      {section:'Savory Snacks', name:'Chippy / Piattos / Clover Chips', taste:'Salty chips, sometimes cheesy or barbecue.', tags:['savory','crunchy'], spice:0},
+      {section:'Savory Snacks', name:'Calbee Pizza Chips', taste:'Pizza in chip form — cheesy-tomato umami.', tags:['savory','umami','cheesy'], spice:0},
+      {section:'Savory Snacks', name:'Baby Star Ramen Snack', taste:'Crunchy ramen bits — light soy seasoning.', tags:['savory','crunchy'], spice:0},
+      {section:'Savory Snacks', name:'Hi-Tempura seaweed chips', taste:'Crispy seaweed with tempura crunch; oceanic savory.', tags:['savory','crunchy'], spice:0},
+      {section:'Savory Snacks', name:'Oishi / Racklings / Chichacorn', taste:'Various corn snacks — very snackable crunch.', tags:['savory','crunchy'], spice:0},
+      {section:'Savory Snacks', name:'Shrimp Crackers', taste:'Puffed and airy with shrimp flavor — disappears fast.', tags:['savory','crunchy'], spice:0},
+
+      // Mochi & Candy
+      {section:'Mochi & Candy', name:'Regent Mochi (ube/matcha/taro)', taste:'Chewy rice dough with sweet filling; earthy if matcha, floral if ube.', tags:['sweet','chewy'], spice:0},
+      {section:'Mochi & Candy', name:'Assorted Mochi Packs', taste:'Chewy mochi with fruit/bean pastes — soft sweetness.', tags:['sweet','chewy'], spice:0},
+      {section:'Mochi & Candy', name:'Mixed Hard Candies (lychee/melon)', taste:'Sweet fruity and sometimes floral; long-lasting.', tags:['sweet','fruity'], spice:0},
+
+      // Noodles & Bowls
+      {section:'Noodles & Bowls', name:'Samyang Buldak', taste:'Extremely spicy, smoky chicken; delicious pain.', tags:['spicy','savory'], spice:3},
+      {section:'Noodles & Bowls', name:'Oyakata Yakisoba', taste:'Sweet-savory stir-fry sauce with chewy noodles.', tags:['savory','sweet'], spice:0},
+      {section:'Noodles & Bowls', name:'Rapokki / Rose Topokki kits', taste:'Sweet-spicy sticky sauce and bouncy rice cakes.', tags:['spicy','sweet','chewy'], spice:2},
+      {section:'Noodles & Bowls', name:'Sanukiya Udon', taste:'Thick, slurpable noodles that soak up broth.', tags:['neutral','chewy'], spice:0},
+      {section:'Noodles & Bowls', name:'Nissin Lomi', taste:'Rich, silky eggy broth; Filipino comfort.', tags:['savory'], spice:0},
+      {section:'Noodles & Bowls', name:'Chapagetti', taste:'Black bean sauce — savory, slightly sweet, earthy.', tags:['savory','sweet'], spice:0},
+      {section:'Noodles & Bowls', name:'Pho Ga / Pho Bo', taste:'Aromatic broth; chicken is lighter, beef is deeper.', tags:['savory','herbal'], spice:0},
+      {section:'Noodles & Bowls', name:'Sinigang Ramen', taste:'Tamarind-sour ramen twist; bright and cozy.', tags:['sour','savory'], spice:1},
+      {section:'Noodles & Bowls', name:'Champorado / Ginataang Mais', taste:'Sweet rice porridges; chocolatey or coconut-creamy corn.', tags:['sweet','creamy'], spice:0},
+      {section:'Noodles & Bowls', name:'Ricey / Pad Thai / Singapore Laksa kits', taste:'Regional kits — pad thai is sweet-sour; laksa is coconut-curry hot.', tags:['savory','sour','spicy'], spice:2},
+      {section:'Noodles & Bowls', name:'Kimchi Ramyun', taste:'Spicy, tangy noodle soup with fermented kick.', tags:['spicy','sour'], spice:2},
+    ];
+
+    const SECTIONS = [
+      'Drinks','Refrigerated & Frozen','Condiments & Pastes',
+      'Biscuits & Sweets','Savory Snacks','Mochi & Candy','Noodles & Bowls'
+    ];
+
+    // --- Render -------------------------------------------------------------
+    const app = document.getElementById('app');
+
+    function render(){
+      app.innerHTML = '';
+      const state = getState();
+      for(const sec of SECTIONS){
+        const secItems = filterItems(DATA.filter(x=>x.section===sec), state);
+        const details = document.createElement('details');
+        details.className = 'palette';
+        details.open = true;
+        const summary = document.createElement('summary');
+        summary.innerHTML = `<div class="section-header"><h2>${iconFor(sec)} ${sec}</h2><span style="color:#777;font-size:13px">${secItems.length} items</span></div>`;
+        details.appendChild(summary);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'grid';
+
+        if(secItems.length===0){
+          const empty = document.createElement('div');
+          empty.style.padding='12px';
+          empty.style.color='#777';
+          empty.textContent = 'No results in this section with current filters.';
+          wrap.appendChild(empty);
+        } else {
+          for(const it of secItems){
+            const card = document.createElement('div');
+            card.className = 'card';
+            const nm = document.createElement('div');
+            nm.className='name';
+            nm.textContent = it.name;
+            const taste = document.createElement('div');
+            taste.className='taste';
+            taste.textContent = it.taste;
+            const meta = document.createElement('div');
+            meta.className='meta';
+            meta.innerHTML = `<span class="spice">${'🌶️'.repeat(it.spice)}${'▫️'.repeat(3-it.spice)}</span>`;
+            const tags = document.createElement('div');
+            tags.className='tags';
+            for(const t of it.tags){
+              const tag = document.createElement('span');
+              tag.className='tag';
+              tag.textContent = tagEmoji(t)+" "+t;
+              tags.appendChild(tag);
+            }
+            card.append(nm,taste,meta,tags);
+            wrap.appendChild(card);
+          }
+        }
+        details.appendChild(wrap);
+        app.appendChild(details);
+      }
+    }
+
+    function iconFor(section){
+      return {
+        'Drinks':'🧋','Refrigerated & Frozen':'❄️','Condiments & Pastes':'🧂',
+        'Biscuits & Sweets':'🍪','Savory Snacks':'🍟','Mochi & Candy':'🍡','Noodles & Bowls':'🍜'
+      }[section] || '✦';
+    }
+
+    function tagEmoji(t){
+      const map = {sweet:'🍬', savory:'🍜', spicy:'🌶️', sour:'🍋', umami:'🧂', fruity:'🍓', herbal:'🌿', chewy:'🍞', crunchy:'🧊', creamy:'🥛', cheesy:'🧀', garlic:'🧄', salty:'🧂', neutral:'⚪', toasty:'🔥', bitter:'☕', funky:'🦐'};
+      return map[t] || '•';
+    }
+
+    // --- Filters ------------------------------------------------------------
+    function getState(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const spiceMin = parseInt(document.getElementById('spiceMin').value,10);
+      const chips = Array.from(document.querySelectorAll('#chips input:checked')).map(x=>x.value);
+      return {q, spiceMin, chips};
+    }
+
+    function filterItems(items, st){
+      return items.filter(it => {
+        if(it.spice < st.spiceMin) return false;
+        if(st.chips.length){
+          for(const tag of st.chips){ if(!it.tags.includes(tag)) return false; }
+        }
+        if(st.q){
+          const blob = (it.name+' '+it.taste+' '+it.tags.join(' ')).toLowerCase();
+          if(!blob.includes(st.q)) return false;
+        }
+        return true;
+      });
+    }
+
+    // --- Events -------------------------------------------------------------
+    document.getElementById('q').addEventListener('input', ()=>render());
+    const spice = document.getElementById('spiceMin');
+    const spiceLabel = document.getElementById('spiceLabel');
+    spice.addEventListener('input', ()=>{spiceLabel.textContent=spice.value; render();});
+    document.querySelectorAll('#chips input').forEach(cb=>cb.addEventListener('change', render));
+
+    document.getElementById('btnReset').addEventListener('click', ()=>{
+      document.getElementById('q').value='';
+      spice.value=0; spiceLabel.textContent='0';
+      document.querySelectorAll('#chips input').forEach(cb=>cb.checked=false);
+      render();
+    });
+    document.getElementById('btnExpand').addEventListener('click', ()=>{
+      document.querySelectorAll('details.palette').forEach(d=>d.open=true);
+    });
+    document.getElementById('btnCollapse').addEventListener('click', ()=>{
+      document.querySelectorAll('details.palette').forEach(d=>d.open=false);
+    });
+
+    // initial
+    render();
+  </script></body>
+</html>
